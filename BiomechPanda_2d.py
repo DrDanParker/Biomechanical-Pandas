@@ -16,13 +16,12 @@
 ###
 ############################################################################"""
 
-import pandas as pd
 
 class Biomech2D:
     
     def __init__(self, fname):
         self.fname = fname
-        self.data = pd.read_csv(self.fname,index_col=0)
+        self.data = pd.read_csv(self.fname,index_col=0) #import and set time as index
             #other file handling methods @ github.com/DrDanParker/Data-Handling
 
     def descriptive(self): # pandas does also have a builtin describe function.
@@ -49,7 +48,8 @@ class Biomech2D:
 ###     Run Script
 ################################################################################
 
-# fname = '.\example.csv' # either move to working directory or update to location
-fname = 'C:\Syncplicity\GitRepos\Biomechanical-Pandas\example.csv'
+import pandas as pd
+
+fname = '.\example.csv' # either move to working directory or update to location
 d = Biomech2D(fname)
-d.descriptive()
+print(d.descriptive())
