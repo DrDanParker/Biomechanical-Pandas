@@ -49,10 +49,8 @@ class Biomech2D:
         if inplace==True:         #Replace original data
             return slope*self.data+intercept
         else:                     #Create new columns to retain original data
-            column_list = list(self.data.columns.values)
-            new_columns = [s + '_calib' for s in column_list]
-            for i in range(len(column_list)):
-                self.data[new_columns[i]] = slope*self.data[column_list[i]]+intercept
+            for col in list(self.data.columns.values):
+                self.data[col+'_calib'] = slope*self.data[col]+intercept
             return(self.data)
     
 
