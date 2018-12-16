@@ -41,8 +41,20 @@ class Biomech2D:
         Descriptives.loc['Skewness'] = self.data.skew()
         Descriptives.loc['Kurtosis'] = self.data.kurtosis()
         return(Descriptives)
-        
-        
+    
+    def linear_calib(self,intercept,slope,inplace=True):
+        '''
+        Linear calibrations typically used to convert voltage output to scale
+        '''
+        if inplace==True:         #Replace original data
+            return slope*self.data+intercept
+        else:                     #Create new columns to retain original data
+            column_list = list(self.data.columns.values)
+            new_columns = [s + '_calib' for s in column_list]
+            for i in range(len(column_list)):
+                self.data[new_columns[i]] = slope*self.data[column_list[i]]+intercept
+            return(self.data)
+    
 
 ################################################################################
 ###     Run Script
@@ -52,4 +64,5 @@ import pandas as pd
 
 fname = '.\example.csv' # either move to working directory or update to location
 d = Biomech2D(fname)
-print(d.descriptive())
+print(d.data)
+print(d.linear_calib(-6.151, -335.49,inplace=False))
