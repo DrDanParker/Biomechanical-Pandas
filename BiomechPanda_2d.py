@@ -47,7 +47,7 @@ class Biomech2D:
         Linear calibrations typically used to convert voltage output to scale
         '''
         if inplace==True:         #Replace original data
-            return slope*self.data+intercept
+            return(slope*self.data+intercept)
         else:                     #Create new columns to retain original data
             for col in list(self.data.columns.values):
                 self.data[col+'_calib'] = slope*self.data[col]+intercept
