@@ -53,6 +53,30 @@ class Biomech2D:
                 self.data[col+'_calib'] = slope*self.data[col]+intercept
             return(self.data)
     
+    
+    def partwise_linear_calib(self,intercepts,slopes,breaks,inplace=True):
+        '''
+        Linear calibrations typically used to convert voltage output to scale
+        '''
+        def func(data,colname=''):
+            for i,s,b in itertools.zip_longest(intercepts,slopes,breaks):
+                    for col in list(data.columns.values):
+                        if b != None:
+                            data[col+colname] = data[col].apply(
+                                        lambda x: (s*x)+i if x>=b else x)
+                        else:
+                            data[col+colname] = data[col].apply(
+                                        lambda x: (s*x)+i if x<breaks[-1] else x)
+            return(data)
+        
+        breaks.sort() # ensures breaks are in ascending order
+        if inplace==True: #Replace original data
+            self.data = func(self.data)
+        else: #Create new columns to retain original data
+            self.data = func(self.data,colname='_calib')
+        return self.data
+
+
 
 ################################################################################
 ###     Run Script
