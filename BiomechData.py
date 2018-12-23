@@ -21,11 +21,10 @@ import os
 
 class BiomechData:
     
-    global bld_flist
+    # global bld_flist
     
     def __init__(self, fpath):
         self.fpath = fpath
-        self.flist = bld_flist(self)
         # self.data = pd.read_csv(self.fname,index_col=0) #import and set time as index
             #other file handling methods @ github.com/DrDanParker/Data-Handling       
     
@@ -41,7 +40,7 @@ class BiomechData:
         ''' builds nested list of all files base on naming convention using _ - 
             can also be used to group files based on subdirectory using / or \\'''
         
-        filelist = self.flist
+        filelist = self.bld_flist()
         
         pref = []
         used = set()
