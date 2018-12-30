@@ -55,6 +55,24 @@ class BiomechData:
                     grp.append(filelist[j])
             groups.append(grp)
         return(groups)
+    
+    def join_file(files,pad=100):
+        ''' builds one dataframe from multiple file with the same data format '''
+        fname = os.path.splitext(os.path.basename(files[0]))[0]
+        dat =[]
+        ind = range(pad)
+        col = pdat.openPD(files[0]).columns
+        if len(files) > 1: 
+            for file in files:
+                dat.append(pdat.openPD(file))
+                pad_ = pd.DataFrame(index=ind,columns=col)
+                pad_ = pad_.fillna(0)
+                dat.append(pad_)
+            odat = pd.concat(dat,axis=0)
+        else:
+            odat = pdat.openPD(files[0])    
+        return odat,fname
+
 
 ################################################################################
 ###     Run Script
