@@ -1,15 +1,16 @@
-###############################################################################
+# -*- coding: utf-8 -*-
+"""############################################################################
 ###
-### BiomechPressure
-### This file is part of GitHub Repository Biomechanical-Pandas
-### This file was created by Dr Daniel Parker 
-### includes a set of fuctions to process walking data from pedar 
-###   
+### Biomechanical Pressure Data Handling
+### This file is part of Biomechanical-Pandas
+### This was originally created by Dr Daniel Parker on 30/12/18 
+###    Twitter: @DrDanParker     GitHub:https://github.com/DrDanParker 
+###     
 ### Copyright (C) 2018 University of Salford - All Rights Reserved
 ### You may use, distribute and modify this code under the terms of MIT Licence
-### See LICENSE file in Biomechanical-Pandas for full details
+### See LICENSE or go to https://tldrlegal.com/license/mit-license for full licence details
 ###
-###############################################################################
+############################################################################"""
 
 import pandas as pd
 

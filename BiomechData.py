@@ -17,7 +17,7 @@
 ############################################################################"""
 
 import os
-
+import pandas as pd
 
 class BiomechData:
     
@@ -25,8 +25,12 @@ class BiomechData:
     
     def __init__(self, fpath):
         self.fpath = fpath
-        # self.data = pd.read_csv(self.fname,index_col=0) #import and set time as index
-            #other file handling methods @ github.com/DrDanParker/Data-Handling       
+        # self.data = pd.read_csv(self.fname,index_col=0) 
+        
+          
+    def openPD(self,fname):
+        fdat = pd.read_csv(fname,sep='\t',skiprows=list(range(9)))
+        return(fdat)
     
     
     def bld_flist(self,ftype='.asc'):
@@ -56,32 +60,33 @@ class BiomechData:
             groups.append(grp)
         return(groups)
     
-    def join_file(files,pad=100):
+    
+    def join_file(self,files,pad=100):
         ''' builds one dataframe from multiple file with the same data format '''
         fname = os.path.splitext(os.path.basename(files[0]))[0]
         dat =[]
         ind = range(pad)
-        col = pdat.openPD(files[0]).columns
+        col = self.openPD(files[0]).columns
         if len(files) > 1: 
             for file in files:
-                dat.append(pdat.openPD(file))
+                dat.append(self.openPD(file))
                 pad_ = pd.DataFrame(index=ind,columns=col)
                 pad_ = pad_.fillna(0)
                 dat.append(pad_)
             odat = pd.concat(dat,axis=0)
         else:
-            odat = pdat.openPD(files[0])    
+            odat = self.openPD(files[0])    
         return odat,fname
 
 
 ################################################################################
 ###     Run Script
 ################################################################################
-
-mydir = 'C:/Temp/AMP_Pedar_Data/' # either move to working directory or update to location
-d = BiomechData(mydir)
-print(len(d.grp_by_part(seperator='\\')))
-
-
-# flist = d.bld_flist()
+if __name__ == "__main__":
+    mydir = 'C:/Temp/Test/' # either move to working directory or update to location
+    d = BiomechData(mydir)
+    data = d.join_file(files=d.bld_flist())
+    print(data)
+    
+    # flist = d.bld_flist()
 
