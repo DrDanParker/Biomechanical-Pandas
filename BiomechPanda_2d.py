@@ -16,7 +16,12 @@
 ###
 ############################################################################"""
 
+
 import itertools
+import pandas as pd
+import scipy.signal as sig
+
+
 
 class Biomech2D:
     
@@ -77,15 +82,15 @@ class Biomech2D:
             self.data = func(self.data,colname='_calib')
         return self.data
 
+    
 
 
 ################################################################################
 ###     Run Script
 ################################################################################
 
-import pandas as pd
-
-fname = '.\example.csv' # either move to working directory or update to location
-d = Biomech2D(fname)
-print(d.data)
-print(d.linear_calib(-6.151, -335.49,inplace=False))
+if __name__ == "__main__":
+    fname = '.\example.csv' # either move to working directory or update to location
+    d = Biomech2D(fname)
+    print(d.data)
+    print(d.linear_calib(-6.151, -335.49,inplace=False))
