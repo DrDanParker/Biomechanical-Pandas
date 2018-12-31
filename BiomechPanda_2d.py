@@ -19,16 +19,22 @@
 
 import itertools
 import pandas as pd
+import numpy as np
 import scipy.signal as sig
+from scipy.signal import argrelextrema
+from matplotlib import pyplot	 as plt
 
 
 
 class Biomech2D:
     
-    def __init__(self, fname):
+    def __init__(self, f):
         self.fname = fname
-        self.data = pd.read_csv(self.fname,index_col=0) #import and set time as index
-        #other file handling methods @ github.com/DrDanParker/Biomechanical-Pandas/BiomechData
+        if isinstance(f, pd.DataFrame):
+            self.data=f
+        else:
+            self.data = pd.read_csv(self.fname,index_col=0) #import and set time as index
+            #other file handling methods @ github.com/DrDanParker/Biomechanical-Pandas/BiomechData
 
     def descriptive(self): # pandas does also have a builtin describe function.
         '''
@@ -81,10 +87,22 @@ class Biomech2D:
         else: #Create new columns to retain original data
             self.data = func(self.data,colname='_calib')
         return self.data
-
     
-
-
+    
+    def find_peaks(self,span=100):
+        """finds local peaks in dataset """
+        ###Original Source: - https://stackoverflow.com/a/50836425
+        df = self.data
+        cols = df.columns
+        ind = df.index.values
+        df_peaks = pd.DataFrame(index=ind,columns=cols)
+        df_mins = pd.DataFrame(index=ind,columns=cols)
+        for col in cols:
+            # Find local peaks
+            df_peaks[col] = df.iloc[argrelextrema(df[col].values, np.less_equal, order=span)[0]][col]
+            df_mins[col] = df.iloc[argrelextrema(df[col].values, np.greater_equal, order=span)[0]][col]
+        return(df_peaks,df_mins)
+        
 ################################################################################
 ###     Run Script
 ################################################################################
@@ -92,5 +110,17 @@ class Biomech2D:
 if __name__ == "__main__":
     fname = '.\example.csv' # either move to working directory or update to location
     d = Biomech2D(fname)
-    print(d.data)
-    print(d.linear_calib(-6.151, -335.49,inplace=False))
+    dat = d.data
+    peaks,mins = d.find_peaks()
+    
+    for col in dat.columns:
+        plt.figure()
+        plt.scatter(dat.index, mins[col], c='r')
+        plt.scatter(dat.index, peaks[col], c='g')
+        plt.plot(dat.index, dat[col])
+        plt.show()
+    
+    
+    
+    
+    # print(d.linear_calib(-6.151, -335.49,inplace=False))
